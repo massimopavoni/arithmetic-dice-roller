@@ -29,13 +29,3 @@ class Roller:
             rolls.append([0, choices(range(1, int(dice[1]) + 1), k=int(dice[0]))])
             rolls[-1][0] = sum(rolls[-1][1])
         return self.rolls_regex.sub('{}', expression).format(*[roll[0] for roll in rolls]), rolls
-
-
-if __name__ == '__main__':
-    command = input().lower()
-    args = command.split(' ')
-    roller = Roller()
-    if len(args) > 1:
-        roller.roll(args[0], args[1])
-    else:
-        roller.roll(args[0])

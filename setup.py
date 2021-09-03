@@ -1,12 +1,12 @@
 from pathlib import Path
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 README = (Path(__file__).parent / "README.md").read_text()
 
 setup(
     name='arithmetic-dice-roller',
-    version='a0.0.1',
+    version='0.0.1a6',
     description='A handy dice roller with extended notation and arithmetic expressions management.',
     long_description=README,
     long_description_content_type="text/markdown",
@@ -16,14 +16,16 @@ setup(
     license='GNU General Public License v3.0',
     classifiers=[
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-        "Programming Language :: Python"
+        "Programming Language :: Python",
+        "Operating System :: OS Independent"
     ],
-    packages=['arithmetic-dice-roller'],
+    platforms=['OS Independent'],
+    packages=find_packages(),
     include_package_data=True,
     install_requires=[""],
     entry_points={
         "console_scripts": [
-            "realpython=reader.__main__:main",
+            "arithmetic-dice-roller=arithmetic_dice_roller.__main__:main"
         ]
-    },
+    }
 )
