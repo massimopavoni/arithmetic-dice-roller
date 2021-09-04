@@ -1,14 +1,22 @@
-from arithmetic_dice_roller.roller import Roller
+from arithmetic_dice_roller.roller import Roller, RollerError
 
 
 def main():
-    command = input().lower()
+    command = input()
     args = command.split(' ')
     roller = Roller()
-    if len(args) > 1:
-        roller.roll(args[0], args[1])
-    else:
-        roller.roll(args[0])
+    try:
+        if len(args) > 1:
+            roller.roll(args[0], args[1])
+        else:
+            roller.roll(args[0])
+        print(roller.expression)
+        print(roller.no_nx_expression)
+        print(roller.rolls)
+        print(roller.no_rolls_expression)
+        print(roller.final_result)
+    except RollerError as error:
+        print(error.message)
 
 
 if __name__ == '__main__':
