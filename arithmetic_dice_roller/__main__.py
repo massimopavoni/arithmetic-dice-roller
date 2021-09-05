@@ -13,7 +13,7 @@ def main():
         print(roller.expression)
         print(roller.no_nx_expression)
         print(roller.rolls)
-        print(roller.no_rolls_expression)
+        print(roller.no_dices_expression)
         print(roller.final_result)
     except RollerError as error:
         print(error.message)
