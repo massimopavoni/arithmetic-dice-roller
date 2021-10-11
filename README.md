@@ -1,8 +1,8 @@
 # arithmetic-dice-roller
-![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/Damax00/arithmetic-dice-roller)
-![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/Damax00/arithmetic-dice-roller?include_prereleases)
-![PyPI](https://img.shields.io/pypi/v/arithmetic-dice-roller)
-![GitHub](https://img.shields.io/github/license/Damax00/arithmetic-dice-roller)
+[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/Damax00/arithmetic-dice-roller?include_prereleases)](https://github.com/Damax00/arithmetic-dice-roller/releases)
+[![PyPI](https://img.shields.io/pypi/v/arithmetic-dice-roller)](https://pypi.org/project/arithmetic-dice-roller/)
+[![GitHub](https://img.shields.io/github/license/Damax00/arithmetic-dice-roller)](https://github.com/Damax00/arithmetic-dice-roller/blob/main/LICENSE)
+[![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/Damax00/arithmetic-dice-roller)](https://www.python.org/downloads/release/python-3100/)
 
 A handy dice roller with extended notation and arithmetic expressions' management.
 
