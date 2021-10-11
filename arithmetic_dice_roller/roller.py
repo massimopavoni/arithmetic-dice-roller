@@ -22,12 +22,12 @@ class RollerError(Exception):
 
 class Roller:
     """
-    Parsing and evaluation of arithmetic expressions with dices syntax and various operators.
+    Parsing and evaluation of arithmetic expressions with dice syntax and various operators.
     Attributes:
         expression: the original expression given in input
         no_nx_expression: the expression in its extended form, without the repeater operator 'nx'
-        rolls: the list of dices results
-        no_dices_expression: the expression without dices syntax, which is replaces with the total results
+        rolls: the list of dice results
+        no_dice_expression: the expression without dice syntax, which is replaces with the total results
         final_result: the evaluation of the expression
         label: an optional description for the expression
     """
@@ -37,7 +37,7 @@ class Roller:
         Class init function
         """
         self.__nx_regex = regex_compile(r'([1-9]\d*)x\(')
-        self.__dices_regex = regex_compile(
+        self.__dice_regex = regex_compile(
             r'([1-9]\d*)?[dD]([1-9]\d*|[fF%](?!\d))(?:([KkXxRr!])(?:(?:(?:(?<=[Rr!])(<=|>=))?([1-9]\d*))?)|(<=|>=)([1-9]\d*)(?:[fF](<=|>=)([1-9]\d*))?)?')
         self.__comparison_operators = {
             '': operator_eq,
@@ -47,13 +47,13 @@ class Roller:
         self.expression = ''
         self.no_nx_expression = ''
         self.rolls = []
-        self.no_dices_expression = ''
+        self.no_dice_expression = ''
         self.final_result = None
         self.label = ''
 
     def roll(self, expression, label=''):
         """
-        Parse and evaluate an arithmetic expression with dices syntax and various operators.
+        Parse and evaluate an arithmetic expression with dice syntax and various operators.
         :param expression: the expression itself
         :param label: an optional description for the expression
         :return: nothing
@@ -61,12 +61,12 @@ class Roller:
         self.expression = expression
         self.label = label
         self.no_nx_expression = self.__parse_nx_operators(self.expression)
-        self.no_dices_expression, self.rolls = self.__parse_dices(self.no_nx_expression)
+        self.no_dice_expression, self.rolls = self.__parse_dice(self.no_nx_expression)
         try:
-            self.final_result = int(sympy_parse_expr(self.no_dices_expression))
+            self.final_result = int(sympy_parse_expr(self.no_dice_expression))
         except Exception as ex:
             # If sympy fails to evaluate the final expression, the syntax was not followed
-            # (some dices substrings were not replaced)
+            # (some dice substrings were not replaced)
             raise RollerError(f"Roller error -> Could not parse arithmetic expression.\n"
                               f"An exception of type {type(ex).__name__} occurred. Arguments:\n{ex.args}")
 
@@ -109,17 +109,17 @@ class Roller:
         # Getting to the end of the substring without returning means that the counter is not 0
         raise RollerError("Roller error -> Could not match balanced brackets.")
 
-    def __parse_dices(self, expression):
+    def __parse_dice(self, expression):
         """
-        Parse dices substrings following the syntax and roll them.
+        Parse dice substrings following the syntax and roll them.
         :param expression: the expression to parse
         :return: tuple of the expression with evaluated rolls and the list of rolls
         """
-        # Find all the dices substrings that follow dices syntax
-        dices_groups = self.__dices_regex.findall(expression)
+        # Find all the dice substrings that follow dice syntax
+        dice_groups = self.__dice_regex.findall(expression)
         rolls = []
-        for dice_groups in dices_groups:
-            # Parse number and type of dices
+        for dice_groups in dice_groups:
+            # Parse number and type of dice
             dice_amount = 1 if not dice_groups[0] else int(dice_groups[0])
             match dice_groups[1].lower():
                 # Fudge
@@ -176,15 +176,15 @@ class Roller:
                                     rolls[-1][0] = 0
                         else:
                             rolls[-1][0] = sum(results)
-        return self.__dices_regex.sub('{}', expression).format(*[roll[0] for roll in rolls]), rolls
+        return self.__dice_regex.sub('{}', expression).format(*[roll[0] for roll in rolls]), rolls
 
     @staticmethod
     def __reroll(dice_amount, dice_type, is_fudge, dice_operator, comparison_operator, comparison_value):
         """
         Roll with operators that need to check each single result.
-        :param dice_amount: the amount of dices to roll
-        :param dice_type: the range of the random choice representing the dices
-        :param is_fudge: whether the dice type is fudge or not
+        :param dice_amount: the amount of dice to roll
+        :param dice_type: the range of the random choice representing the dice
+        :param is_fudge: whether the die type is fudge or not
         :param dice_operator: the specified reroll operator
         :param comparison_operator: the type of comparison to check
         :param comparison_value: the value for the comparison
