@@ -6,7 +6,7 @@ README = (Path(__file__).parent / "README.md").read_text()
 
 setup(
     name='arithmetic-dice-roller',
-    version='0.0.2b1',
+    version='0.1.0',
     description='A handy dice roller with extended notation and arithmetic expressions management.',
     long_description=README,
     long_description_content_type="text/markdown",
