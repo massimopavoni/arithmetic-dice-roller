@@ -1,12 +1,15 @@
 # arithmetic-dice-roller
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/Damax00/arithmetic-dice-roller?include_prereleases)](https://github.com/Damax00/arithmetic-dice-roller/releases)
 [![PyPI](https://img.shields.io/pypi/v/arithmetic-dice-roller)](https://pypi.org/project/arithmetic-dice-roller/)
-[![GitHub](https://img.shields.io/github/license/Damax00/arithmetic-dice-roller)](https://github.com/Damax00/arithmetic-dice-roller/blob/main/LICENSE)
+[![GitHub License](https://img.shields.io/github/license/Damax00/arithmetic-dice-roller)](https://github.com/Damax00/arithmetic-dice-roller/blob/main/LICENSE)
 [![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/Damax00/arithmetic-dice-roller)](https://www.python.org/downloads/release/python-3100/)
 
 A handy dice roller with extended notation and arithmetic expressions' management.
 
 The package aims to provide an easy-to-use implementation of a dice roller application with multiple operators' options and automatic results calculation.
+
+### Dependencies
+- [SymPy](https://www.sympy.org) ([LICENSE](https://github.com/sympy/sympy/blob/master/LICENSE))
 
 ### Syntax
 Chosen syntax is inspired to the one from the [CritDice mobile app](https://www.critdice.com/) (you can check the advanced notation for similarities with this package).
