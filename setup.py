@@ -6,14 +6,14 @@ README = (Path(__file__).parent / "README.md").read_text()
 
 setup(
     name='arithmetic-dice-roller',
-    version='0.1.0',
-    description='A handy dice roller with extended notation and arithmetic expressions management.',
+    version='0.1.1',
+    description="A handy dice roller with extended notation and arithmetic expressions management.",
     long_description=README,
     long_description_content_type="text/markdown",
-    url='https://github.com/Damax00/arithmetic-dice-roller',
     author='Massimo Pavoni',
     author_email='maspavoni@gmail.com',
-    license='GNU General Public License v3.0',
+    url='https://github.com/Damax00/arithmetic-dice-roller',
+    license_files='LICENSE',
     classifiers=[
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Programming Language :: Python",
@@ -22,10 +22,11 @@ setup(
     platforms=['OS Independent'],
     packages=find_packages(),
     include_package_data=True,
-    install_requires=[""],
+    python_requires='==3.10',
+    install_requires=['sympy==1.9'],
     entry_points={
-        "console_scripts": [
-            "arithmetic-dice-roller=arithmetic_dice_roller.__main__:main"
+        'console_scripts': [
+            'arithmetic-dice-roller=arithmetic_dice_roller.__main__:main'
         ]
     }
 )
