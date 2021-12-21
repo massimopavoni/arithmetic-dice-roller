@@ -12,7 +12,7 @@ The package aims to provide an easy-to-use implementation of a dice roller appli
 - [SymPy](https://www.sympy.org) ([LICENSE](https://github.com/sympy/sympy/blob/master/LICENSE))
 
 ### Syntax
-Chosen syntax is inspired to the one from the [CritDice mobile app](https://www.critdice.com/) (you can check the advanced notation for similarities with this package).
+Chosen syntax is inspired to the one from the [CritDice mobile app](https://www.critdice.com/) (you can check the [advanced notation](https://www.critdice.com/roll-advanced-dice) for similarities with this package).
 
 The output object once the expression has been evaluated ("rolled") contains:
 - the original expression

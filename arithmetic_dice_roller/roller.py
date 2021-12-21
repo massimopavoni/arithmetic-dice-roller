@@ -32,34 +32,32 @@ class Roller:
         label: an optional description for the expression
     """
 
-    def __init__(self):
+    def __init__(self, expression, label=''):
         """
         Class init function
+        :param expression: the expression itself
+        :param label: an optional description for the expression
         """
         self.__nx_regex = regex_compile(r'([1-9]\d*)x\(')
         self.__dice_regex = regex_compile(
-            r'([1-9]\d*)?[dD]([1-9]\d*|[fF%](?!\d))(?:([KkXxRr!])(?:(?:(?:(?<=[Rr!])(<=|>=))?([1-9]\d*))?)|(<=|>=)([1-9]\d*)(?:[fF](<=|>=)([1-9]\d*))?)?')
+            r'(([1-9]\d*)?[dD]([1-9]\d*|[fF%](?!\d))(?:([KkXxRr!])(?:(?:(?:(?<=[Rr!])(<=|>=))?([1-9]\d*))?)|(<=|>=)([1-9]\d*)(?:[fF](<=|>=)([1-9]\d*))?)?)')
         self.__comparison_operators = {
             '': operator_eq,
             '<=': operator_le,
             '>=': operator_ge
         }
-        self.expression = ''
+        self.expression = expression
         self.no_nx_expression = ''
         self.rolls = []
         self.no_dice_expression = ''
         self.final_result = None
-        self.label = ''
+        self.label = label
 
-    def roll(self, expression, label=''):
+    def roll(self):
         """
         Parse and evaluate an arithmetic expression with dice syntax and various operators.
-        :param expression: the expression itself
-        :param label: an optional description for the expression
         :return: nothing
         """
-        self.expression = expression
-        self.label = label
         self.no_nx_expression = self.__parse_nx_operators(self.expression)
         self.no_dice_expression, self.rolls = self.__parse_dice(self.no_nx_expression)
         try:
@@ -67,8 +65,10 @@ class Roller:
         except Exception as ex:
             # If sympy fails to evaluate the final expression, the syntax was not followed
             # (some dice substrings were not replaced)
-            raise RollerError(f"Roller error -> Could not parse arithmetic expression.\n"
-                              f"An exception of type {type(ex).__name__} occurred. Arguments:\n{ex.args}")
+            raise RollerError(f"\nRoller error -> Could not parse following arithmetic expression:\n"
+                              f"{self.no_dice_expression}\nA syntax check is advised "
+                              f"(https://github.com/Damax00/arithmetic-dice-roller/blob/main/README.md#Syntax)\n"
+                              f"An exception of type {type(ex).__name__} occurred. Arguments:\n{ex.args}\n")
 
     def __parse_nx_operators(self, expression):
         """
@@ -107,7 +107,7 @@ class Roller:
             if counter == 0:
                 return index
         # Getting to the end of the substring without returning means that the counter is not 0
-        raise RollerError("Roller error -> Could not match balanced brackets.")
+        raise RollerError("\nRoller error -> Could not match balanced brackets.")
 
     def __parse_dice(self, expression):
         """
@@ -120,27 +120,35 @@ class Roller:
         rolls = []
         for dice_groups in dice_groups:
             # Parse number and type of dice
-            dice_amount = 1 if not dice_groups[0] else int(dice_groups[0])
-            match dice_groups[1].lower():
+            dice_amount = 1 if not dice_groups[1] else int(dice_groups[1])
+            is_fudge = False
+            match dice_groups[2].lower():
                 # Fudge
                 case 'f':
                     dice_type = range(-1, 2)
+                    is_fudge = True
                 # Percentage
                 case '%':
                     dice_type = range(1, 101)
                 # All the others
                 case _:
-                    dice_type = range(1, int(dice_groups[1]) + 1)
+                    dice_type = range(1, int(dice_groups[2]) + 1)
             # Operators that need to check each roll after it has been evaluated
-            if dice_groups[2] in ['R', 'r', '!']:
-                comparison_operator = self.__comparison_operators[dice_groups[3]]
-                comparison_value = int(dice_groups[4])
-                rolls.append(self.__reroll(dice_amount, dice_type, True if dice_groups[1].lower() == 'f' else False,
-                                           dice_groups[2], comparison_operator, comparison_value))
+            if dice_groups[3] in ['R', 'r', '!']:
+                comparison_operator = self.__comparison_operators[dice_groups[4]]
+                if not dice_groups[5]:
+                    if dice_groups[3] == '!':
+                        comparison_value = 4 if is_fudge else dice_type.stop - 1
+                    else:
+                        comparison_value = -4 if is_fudge else 1
+                else:
+                    comparison_value = int(dice_groups[5])
+                rolls.append(self.__reroll(dice_amount, dice_type, is_fudge,
+                                           dice_groups[3], comparison_operator, comparison_value))
             else:
                 # In all the other cases all the rolls are immediately evaluated
                 results = []
-                if dice_groups[1].lower() == 'f':
+                if is_fudge:
                     rolls.append([0, [[0, random_choices(dice_type, k=4)] for _ in range(0, dice_amount)]])
                     for i, roll in enumerate(rolls[-1][1]):
                         results.append(sum(roll[1]))
@@ -149,34 +157,36 @@ class Roller:
                     rolls.append([0, random_choices(dice_type, k=dice_amount)])
                     results = rolls[-1][1]
                 # Operators that modify the result after having evaluated all the rolls
-                match dice_groups[2]:
+                keep_drop_amount = 1 if not dice_groups[5] else int(dice_groups[5])
+                match dice_groups[3]:
                     # Keep highest
                     case 'K':
-                        rolls[-1][0] = sum(nlargest(int(dice_groups[4]), results))
+                        rolls[-1][0] = sum(nlargest(keep_drop_amount, results))
                     # Keep lowest
                     case 'k':
-                        rolls[-1][0] = sum(nsmallest(int(dice_groups[4]), results))
+                        rolls[-1][0] = sum(nsmallest(keep_drop_amount, results))
                     # Drop highest
                     case 'X':
-                        rolls[-1][0] = sum(nsmallest(dice_amount - int(dice_groups[4]), results))
+                        rolls[-1][0] = sum(nsmallest(dice_amount - keep_drop_amount, results))
                     # Drop lowest
                     case 'x':
-                        rolls[-1][0] = sum(nlargest(dice_amount - int(dice_groups[4]), results))
+                        rolls[-1][0] = sum(nlargest(dice_amount - keep_drop_amount, results))
                     # Successes/failures or none
                     case _:
                         # Count successes?
-                        if dice_groups[5]:
-                            comparison_operator = self.__comparison_operators[dice_groups[5]]
-                            rolls[-1][0] = sum(map(lambda r: comparison_operator(r, int(dice_groups[6])), results))
+                        if dice_groups[6]:
+                            comparison_operator = self.__comparison_operators[dice_groups[6]]
+                            rolls[-1][0] = sum(map(lambda r: comparison_operator(r, int(dice_groups[7])), results))
                             # Count failures?
-                            if dice_groups[7]:
-                                comparison_operator = self.__comparison_operators[dice_groups[7]]
-                                rolls[-1][0] -= sum(map(lambda r: comparison_operator(r, int(dice_groups[8])), results))
+                            if dice_groups[8]:
+                                comparison_operator = self.__comparison_operators[dice_groups[8]]
+                                rolls[-1][0] -= sum(map(lambda r: comparison_operator(r, int(dice_groups[9])), results))
                                 if rolls[-1][0] < 0:
                                     rolls[-1][0] = 0
                         else:
                             rolls[-1][0] = sum(results)
-        return self.__dice_regex.sub('{}', expression).format(*[roll[0] for roll in rolls]), rolls
+            rolls[-1].insert(0, dice_groups[0])
+        return self.__dice_regex.sub('{}', expression).format(*[roll[1] for roll in rolls]), rolls
 
     @staticmethod
     def __reroll(dice_amount, dice_type, is_fudge, dice_operator, comparison_operator, comparison_value):
