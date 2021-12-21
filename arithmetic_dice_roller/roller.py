@@ -53,7 +53,7 @@ class Roller:
         self.final_result = None
         self.label = label
 
-    def roll(self, ):
+    def roll(self):
         """
         Parse and evaluate an arithmetic expression with dice syntax and various operators.
         :return: nothing
@@ -68,7 +68,7 @@ class Roller:
             raise RollerError(f"\nRoller error -> Could not parse following arithmetic expression:\n"
                               f"{self.no_dice_expression}\nA syntax check is advised "
                               f"(https://github.com/Damax00/arithmetic-dice-roller/blob/main/README.md#Syntax)\n"
-                              f"An exception of type {type(ex).__name__} occurred. Arguments:\n{ex.args}")
+                              f"An exception of type {type(ex).__name__} occurred. Arguments:\n{ex.args}\n")
 
     def __parse_nx_operators(self, expression):
         """
