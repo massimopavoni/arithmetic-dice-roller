@@ -12,7 +12,7 @@ setup(
     long_description_content_type="text/markdown",
     author='Massimo Pavoni',
     author_email='maspavoni@gmail.com',
-    url='https://github.com/Damax00/arithmetic-dice-roller',
+    url='https://github.com/massimopavoni/arithmetic-dice-roller',
     license_files='LICENSE',
     classifiers=[
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",

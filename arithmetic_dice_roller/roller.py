@@ -67,7 +67,7 @@ class Roller:
             # (some dice substrings were not replaced)
             raise RollerError(f"\nRoller error -> Could not parse following arithmetic expression:\n"
                               f"{self.no_dice_expression}\nA syntax check is advised "
-                              f"(https://github.com/Damax00/arithmetic-dice-roller/blob/main/README.md#Syntax)\n"
+                              f"(https://github.com/massimopavoni/arithmetic-dice-roller/blob/main/README.md#Syntax)\n"
                               f"An exception of type {type(ex).__name__} occurred. Arguments:\n{ex.args}\n")
 
     def __parse_nx_operators(self, expression):
