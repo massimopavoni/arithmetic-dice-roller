@@ -6,7 +6,7 @@ README = (Path(__file__).parent / "README.md").read_text()
 
 setup(
     name='arithmetic-dice-roller',
-    version='0.2.2',
+    version='0.2.3',
     description="A handy dice roller with extended notation and arithmetic expressions management.",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -23,7 +23,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     python_requires='>=3.10',
-    install_requires=['sympy==1.9'],
+    install_requires=['sympy>=1.11'],
     entry_points={
         'console_scripts': [
             'arithmetic-dice-roller=arithmetic_dice_roller.__main__:main'
