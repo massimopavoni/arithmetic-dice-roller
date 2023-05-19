@@ -136,11 +136,11 @@ class Roller:
         # Find all the dice substrings that follow dice syntax
         dice_groups = self.__dice_regex.findall(expression)
         rolls = []
-        for dice_groups in dice_groups:
+        for dice_group in dice_groups:
             # Parse number and type of dice
-            dice_amount = 1 if not dice_groups[1] else int(dice_groups[1])
+            dice_amount = 1 if not dice_group[1] else int(dice_group[1])
             is_fudge = False
-            match dice_groups[2].lower():
+            match dice_group[2].lower():
                 # Fudge
                 case 'f':
                     dice_type = range(-1, 2)
@@ -150,19 +150,19 @@ class Roller:
                     dice_type = range(1, 101)
                 # All the others
                 case _:
-                    dice_type = range(1, int(dice_groups[2]) + 1)
+                    dice_type = range(1, int(dice_group[2]) + 1)
             # Operators that need to check each roll after it has been evaluated
-            if dice_groups[3] in ['R', 'r', '!']:
-                comparison_operator = self.__comparison_operators[dice_groups[4]]
-                if not dice_groups[5]:
-                    if dice_groups[3] == '!':
+            if dice_group[3] in ['R', 'r', '!']:
+                comparison_operator = self.__comparison_operators[dice_group[4]]
+                if not dice_group[5]:
+                    if dice_group[3] == '!':
                         comparison_value = 4 if is_fudge else dice_type.stop - 1
                     else:
                         comparison_value = -4 if is_fudge else 1
                 else:
-                    comparison_value = int(dice_groups[5])
+                    comparison_value = int(dice_group[5])
                 rolls.append(self.__reroll(dice_amount, dice_type, is_fudge,
-                                           dice_groups[3], comparison_operator, comparison_value))
+                                           dice_group[3], comparison_operator, comparison_value))
             else:
                 # In all the other cases all the rolls are immediately evaluated
                 results = []
@@ -175,8 +175,8 @@ class Roller:
                     rolls.append([0, random_choices(dice_type, k=dice_amount)])
                     results = rolls[-1][1]
                 # Operators that modify the result after having evaluated all the rolls
-                keep_drop_amount = 1 if not dice_groups[5] else int(dice_groups[5])
-                match dice_groups[3]:
+                keep_drop_amount = 1 if not dice_group[5] else int(dice_group[5])
+                match dice_group[3]:
                     # Keep highest
                     case 'K':
                         rolls[-1][0] = sum(nlargest(keep_drop_amount, results))
@@ -192,18 +192,18 @@ class Roller:
                     # Successes/failures or none
                     case _:
                         # Count successes?
-                        if dice_groups[6]:
-                            comparison_operator = self.__comparison_operators[dice_groups[6]]
-                            rolls[-1][0] = sum(map(lambda r: comparison_operator(r, int(dice_groups[7])), results))
+                        if dice_group[6]:
+                            comparison_operator = self.__comparison_operators[dice_group[6]]
+                            rolls[-1][0] = sum(map(lambda r: comparison_operator(r, int(dice_group[7])), results))
                             # Count failures?
-                            if dice_groups[8]:
-                                comparison_operator = self.__comparison_operators[dice_groups[8]]
-                                rolls[-1][0] -= sum(map(lambda r: comparison_operator(r, int(dice_groups[9])), results))
+                            if dice_group[8]:
+                                comparison_operator = self.__comparison_operators[dice_group[8]]
+                                rolls[-1][0] -= sum(map(lambda r: comparison_operator(r, int(dice_group[9])), results))
                                 if rolls[-1][0] < 0:
                                     rolls[-1][0] = 0
                         else:
                             rolls[-1][0] = sum(results)
-            rolls[-1].insert(0, dice_groups[0])
+            rolls[-1].insert(0, dice_group[0])
         return self.__dice_regex.sub('{}', expression).format(*[roll[1] for roll in rolls]), rolls
 
     @staticmethod

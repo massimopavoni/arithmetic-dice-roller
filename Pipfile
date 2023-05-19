@@ -4,9 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-sympy = ">=1.11"
+sympy = ">=1.12"
 
 [dev-packages]
 
 [requires]
-python_version = "3.10"
+python_version = "3.11"

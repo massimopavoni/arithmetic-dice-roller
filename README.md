@@ -2,7 +2,7 @@
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/massimopavoni/arithmetic-dice-roller?include_prereleases)](https://github.com/massimopavoni/arithmetic-dice-roller/releases)
 [![PyPI Package](https://img.shields.io/pypi/v/arithmetic-dice-roller)](https://pypi.org/project/arithmetic-dice-roller/)
 [![GitHub License](https://img.shields.io/github/license/massimopavoni/arithmetic-dice-roller)](https://github.com/massimopavoni/arithmetic-dice-roller/blob/main/LICENSE)
-[![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/massimopavoni/arithmetic-dice-roller)](https://www.python.org/downloads/release/python-3100/)
+[![GitHub Pipenv locked Python version](https://img.shields.io/github/pipenv/locked/python-version/massimopavoni/arithmetic-dice-roller)](https://www.python.org/downloads/release/python-3110/)
 
 [![Discord](https://img.shields.io/discord/926217143194886234?label=Join%20Not%20Declared%20Developers)](https://discord.gg/ZA76nJ3RsU)
 
