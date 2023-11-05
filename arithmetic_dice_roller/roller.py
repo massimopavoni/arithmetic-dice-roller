@@ -1,21 +1,3 @@
-"""
-arithmetic-dice-roller
-Copyright (C) 2021  Massimo Pavoni
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-"""
-
 from heapq import nlargest, nsmallest
 from operator import eq as operator_eq, le as operator_le, ge as operator_ge
 from random import choice as random_choice, choices as random_choices
